@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 20% 99%;
+    --foreground: 240 10% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    --primary: 249 70% 60%;          /* indigo/violet — Fireflies accent */
+    --primary-foreground: 0 0% 100%;
+    --muted: 240 16% 96%;
+    --muted-foreground: 240 6% 45%;
+    --accent: 249 70% 96%;
+    --accent-foreground: 249 70% 40%;
+    --border: 240 12% 90%;
+    --input: 240 12% 90%;
+    --ring: 249 70% 60%;
+    --sidebar: 249 30% 13%;          /* dark sidebar rail in both themes */
+  }
+
+  .dark {
+    --background: 240 12% 8%;
+    --foreground: 240 10% 92%;
+    --card: 240 12% 11%;
+    --card-foreground: 240 10% 92%;
+    --primary: 249 75% 66%;
+    --primary-foreground: 0 0% 100%;
+    --muted: 240 8% 16%;
+    --muted-foreground: 240 6% 60%;
+    --accent: 249 40% 22%;
+    --accent-foreground: 249 70% 85%;
+    --border: 240 8% 20%;
+    --input: 240 8% 20%;
+    --ring: 249 75% 66%;
+    --sidebar: 240 15% 6%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Search-match highlight inside transcript */
+mark.hl {
+  background-color: hsl(var(--primary) / 0.28);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+/* Custom scrollbars for the panels */
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+@media print {
+  .no-print { display: none !important; }
+}
