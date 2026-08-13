@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     # Comma-separated list of allowed frontend origins for CORS.
     cors_origins: str = "http://localhost:3000"
 
+    # Load demo data automatically on startup if the database is empty.
+    # Safe with a persistent disk (only seeds an empty DB); keeps the demo
+    # populated on ephemeral free-tier hosts that reset the filesystem.
+    auto_seed: bool = True
+
     # --- Uploads ---
     max_upload_bytes: int = 5 * 1024 * 1024  # 5 MB cap on transcript files
 

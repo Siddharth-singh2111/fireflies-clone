@@ -34,10 +34,13 @@ app = FastAPI(
     description="Backend API for a Fireflies.ai-style meeting notes platform.",
 )
 
+# We use no cookies/credentials (auth is mocked), so allow_credentials stays
+# False — that keeps a "*" origin fallback valid and avoids the browser's
+# wildcard-with-credentials rejection.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -56,6 +59,12 @@ def on_startup() -> None:
             cur.close()
 
     Base.metadata.create_all(bind=engine)
+
+    # Populate demo data on first boot (non-destructive). See AUTO_SEED.
+    if settings.auto_seed:
+        from app.seed import seed_if_empty
+
+        seed_if_empty()
 
 
 @app.exception_handler(Exception)

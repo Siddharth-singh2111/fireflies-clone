@@ -1,0 +1,43 @@
+# Render Blueprint for the Fireflies-clone backend (FastAPI + SQLite, Docker).
+#
+# Deploy: Render Dashboard → New → Blueprint → pick this repo. Render reads this
+# file, builds backend/Dockerfile, and starts the service.
+#
+# NOTE ON PERSISTENCE (important):
+#   Render's FREE plan has an EPHEMERAL filesystem and does NOT support disks,
+#   so a free instance resets its SQLite file on redeploy / cold start. That's
+#   fine here: AUTO_SEED reloads the demo meetings whenever the DB is empty, so
+#   the app is always populated. User-created meetings won't survive a cold
+#   start on free.
+#   For TRUE persistence, switch `plan` to `starter` (paid) and UNCOMMENT the
+#   `disk:` block + the `DATABASE_URL` env var below — the SQLite file then lives
+#   on a persistent disk at /data and survives redeploys.
+
+services:
+  - type: web
+    name: fireflies-backend
+    runtime: docker
+    repo: https://github.com/Siddharth-singh2111/fireflies-clone
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Set this to your deployed frontend origin (e.g. https://your-app.vercel.app).
+      # Use "*" temporarily while testing. sync:false = you fill it in the dashboard.
+      - key: CORS_ORIGINS
+        sync: false
+      - key: AUTO_SEED
+        value: "true"
+
+    # --- Enable for TRUE persistence (requires plan: starter or higher) ---
+    # disk:
+    #   name: fireflies-data
+    #   mountPath: /data
+    #   sizeGB: 1
+    # And add this env var so SQLite writes to the persistent disk:
+    #   - key: DATABASE_URL
+    #     value: sqlite:////data/app.db

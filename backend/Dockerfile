@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Seed on first boot if the DB doesn't exist yet, then start the server.
+# The app creates tables and auto-seeds an empty DB on startup (AUTO_SEED),
+# so no separate seed step is needed. Render provides $PORT.
 EXPOSE 8000
-CMD ["sh", "-c", "python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
